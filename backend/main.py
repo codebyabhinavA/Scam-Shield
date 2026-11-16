@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from database import get_connection
 from routers import auth
+from routers import auth, checks
 app = FastAPI(title="Scam Shield API")
 app.include_router(auth.router)
+app.include_router(checks.router)
 
 @app.get("/health")
 def health():
