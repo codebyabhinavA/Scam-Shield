@@ -7,3 +7,4 @@ pydantic[email]
 pyjwt
 pytest
 httpx
+google-genai

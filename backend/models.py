@@ -2,7 +2,7 @@ from typing import Annotated
 from pydantic import StringConstraints
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
-
+from typing import Annotated, Literal
 
 class SignupRequest(BaseModel):
     email: EmailStr
@@ -47,3 +47,13 @@ class CheckDetail(CheckSummary):
     message_text: str
     next_steps: str | None
     red_flags: list[RedFlag]
+class AIRedFlag(BaseModel):
+    type: str
+    explanation: str
+
+
+class AIVerdict(BaseModel):
+    risk_level: Literal["low", "medium", "high"]
+    summary: str
+    red_flags: list[AIRedFlag]
+    next_steps: str
