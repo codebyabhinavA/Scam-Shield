@@ -30,7 +30,10 @@ Rules:
 - Tokens like [OTP] or [PHONE] are masked private data; ignore them.
 - Write in English."""
 
-_client = genai.Client(api_key=GEMINI_API_KEY)
+_client = genai.Client(
+    api_key=GEMINI_API_KEY,
+    http_options=types.HttpOptions(timeout=30_000),  # milliseconds
+)
 
 
 def analyze_message(text: str) -> dict:

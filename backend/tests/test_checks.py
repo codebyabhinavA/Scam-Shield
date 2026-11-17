@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 from fastapi.testclient import TestClient
-
+from ai_service import AIOutputError, AIServiceError
 from database import get_connection
 from main import app
 
@@ -55,3 +55,31 @@ def test_validation_and_delete(two_users):
     check_id = client.post("/checks", json=MSG, headers=a).json()["id"]
     assert client.delete(f"/checks/{check_id}", headers=a).status_code == 204
     assert client.get(f"/checks/{check_id}", headers=a).status_code == 404
+def _raiser(exc):
+    def f(text):
+        raise exc
+    return f
+
+
+def test_ai_service_error_returns_503_and_saves_nothing(two_users, monkeypatch):
+    a, _ = two_users
+    monkeypatch.setattr("routers.checks.get_verdict", _raiser(AIServiceError()))
+    assert client.post("/checks", json=MSG, headers=a).status_code == 503
+    assert client.get("/checks", headers=a).json() == []
+
+
+def test_ai_bad_output_returns_502(two_users, monkeypatch):
+    a, _ = two_users
+    monkeypatch.setattr("routers.checks.get_verdict", _raiser(AIOutputError()))
+    assert client.post("/checks", json=MSG, headers=a).status_code == 502
+
+
+def test_stored_message_is_redacted(two_users):
+    a, _ = two_users
+    r = client.post(
+        "/checks",
+        json={"message_text": "Your OTP is 482913, call 9876543210"},
+        headers=a,
+    )
+    text = r.json()["message_text"]
+    assert "482913" not in text and "9876543210" not in text

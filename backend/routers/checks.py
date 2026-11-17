@@ -1,19 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-
+from ai_service import AIOutputError, AIServiceError, get_verdict
+from redaction import redact
 from database import get_connection
 from dependencies import get_current_user
 from models import CheckCreate, CheckDetail, CheckSummary
 
 router = APIRouter(prefix="/checks", tags=["checks"])
-
-# TEMPORARY fake verdict, replaced by the AI on Day 7
-FAKE_VERDICT = {
-    "risk_level": "medium",
-    "summary": "Placeholder verdict (AI not connected yet).",
-    "next_steps": "Do not click links or share OTPs.",
-    "red_flags": [{"type": "placeholder", "explanation": "Example red flag."}],
-}
-
 
 def _get_check_detail(conn, check_id: int, user_id: int):
     check = conn.execute(
@@ -32,17 +24,30 @@ def _get_check_detail(conn, check_id: int, user_id: int):
 
 @router.post("", response_model=CheckDetail, status_code=status.HTTP_201_CREATED)
 def create_check(payload: CheckCreate, user=Depends(get_current_user)):
-    v = FAKE_VERDICT
+    try:
+        verdict = get_verdict(payload.message_text)
+    except AIServiceError:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="The analysis service is busy or unavailable. Please try again in a minute.",
+        )
+    except AIOutputError:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="The analysis returned an unexpected result. Please try again.",
+        )
+
+    stored_text = redact(payload.message_text)
     with get_connection() as conn:
         row = conn.execute(
             "INSERT INTO checks (user_id, message_text, risk_level, summary, next_steps) "
             "VALUES (%s, %s, %s, %s, %s) RETURNING id",
-            (user["id"], payload.message_text, v["risk_level"], v["summary"], v["next_steps"]),
+            (user["id"], stored_text, verdict.risk_level, verdict.summary, verdict.next_steps),
         ).fetchone()
-        for f in v["red_flags"]:
+        for flag in verdict.red_flags[:10]:
             conn.execute(
                 "INSERT INTO red_flags (check_id, type, explanation) VALUES (%s, %s, %s)",
-                (row["id"], f["type"], f["explanation"]),
+                (row["id"], flag.type, flag.explanation),
             )
         return _get_check_detail(conn, row["id"], user["id"])
 
