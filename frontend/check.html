@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Scam Shield - Check Threat & Security Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#006194",
+            "primary-container": "#007bb9",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#fdfcff",
+            "secondary": "#525f75",
+            "secondary-container": "#d6e3fe",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#58657b",
+            "on-secondary-fixed": "#0e1c2f",
+            "on-secondary-fixed-variant": "#3a475c",
+            "tertiary": "#00685f",
+            "tertiary-container": "#008378",
+            "tertiary-fixed": "#89f5e7",
+            "tertiary-fixed-dim": "#6bd8cb",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#f4fffc",
+            "on-tertiary-fixed": "#00201d",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f7f9fb",
+            "surface-dim": "#d8dadc",
+            "surface-bright": "#f7f9fb",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f4f6",
+            "surface-container": "#eceef0",
+            "surface-container-high": "#e6e8ea",
+            "surface-container-highest": "#e0e3e5",
+            "on-surface": "#191c1e",
+            "on-surface-variant": "#3f4850",
+            "outline": "#707881",
+            "outline-variant": "#bfc7d2",
+            "background": "#f7f9fb",
+            "on-background": "#191c1e"
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: max(884px, 100dvh);
+    }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col antialiased selection:bg-secondary-container">
+  
+  <!-- Fixed Top Header -->
+  <header class="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/30">
+    <div class="h-16 max-w-5xl mx-auto px-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-lg text-on-surface tracking-tight leading-none">Scam Shield</span>
+          <span id="nav-subtitle" class="text-[11px] text-primary uppercase font-bold tracking-wider leading-tight">Check Threat</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex flex-col text-right">
+          <span id="nav-user-email" class="text-xs font-semibold text-on-surface truncate max-w-[200px]">Account</span>
+          <span class="text-[11px] text-tertiary font-bold">Encrypted Session</span>
+        </div>
+        <button id="logout-header-btn" class="w-9 h-9 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface transition-colors" title="Log Out">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content Area -->
+  <main class="flex-1 w-full max-w-5xl mx-auto px-5 pt-20 pb-28 flex flex-col">
+    
+    <!-- VIEW 1: CHECK SUSPICIOUS MESSAGE -->
+    <section id="view-check" class="flex flex-col w-full space-y-5">
+      
+      <!-- Friendly Welcoming Header -->
+      <div class="flex flex-col space-y-1.5 pt-1">
+        <div class="inline-flex items-center gap-2 self-start px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed">
+          <span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+          <span class="text-xs font-bold">Safe & Confidential Check</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Paste a suspicious message below</h2>
+        <p class="text-base text-on-surface-variant">SMS, WhatsApp, delivery alerts, or emails — we'll check it safely.</p>
+      </div>
+
+      <!-- Main Analysis Input Card -->
+      <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-5 border border-outline-variant/30 flex flex-col space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <label class="font-bold text-sm text-on-surface flex items-center gap-1.5" for="scam-text-input">
+            <span class="material-symbols-outlined text-primary text-[20px]">chat_paste_go</span>
+            Message text to check
+          </label>
+          <button id="load-sample-btn" type="button" class="text-xs font-bold text-primary hover:text-primary-container inline-flex items-center gap-1 transition-colors">
+            <span class="material-symbols-outlined text-[16px]">help_outline</span>
+            Try sample message
+          </button>
+        </div>
+
+        <!-- Text Area Frame with Counter inside -->
+        <div class="relative bg-surface-container-lowest rounded-xl shadow-inner border border-outline-variant/40">
+          <textarea
+            id="scam-text-input"
+            rows="6"
+            placeholder="e.g. 'URGENT: Postal service parcel pending delivery fee. Click here to confirm your address before return to sender: http://bit.ly/...'"
+            class="w-full bg-transparent text-on-surface text-base p-4 rounded-t-xl focus:outline-none focus:bg-surface-container-low/40 transition-colors resize-y min-h-[180px] placeholder:text-outline"
+          ></textarea>
+          <div class="px-4 py-2 bg-surface-container-low rounded-b-xl flex items-center justify-between border-t border-outline-variant/20">
+            <span class="inline-flex items-center gap-1.5 text-on-surface-variant text-xs">
+              <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+              Ready for inspection
+            </span>
+            <span id="char-counter" class="text-xs text-on-surface-variant font-semibold">
+              0 / 5,000 characters
+            </span>
+          </div>
+        </div>
+
+        <!-- Quick Action Bar -->
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <button id="voice-input-btn" type="button" class="flex-1 min-w-[130px] min-h-[48px] px-3.5 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+            <span class="material-symbols-outlined text-primary text-[20px]">mic</span>
+            <span id="voice-btn-label">Dictate voice</span>
+          </button>
+          <button id="paste-clipboard-btn" type="button" class="flex-1 min-w-[140px] min-h-[48px] px-3.5 py-2.5 rounded-xl bg-secondary-container hover:bg-secondary-container/80 text-on-secondary-fixed text-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+            <span class="material-symbols-outlined text-primary text-[20px]">content_paste</span>
+            <span>Paste clipboard</span>
+          </button>
+          <button id="clear-input-btn" type="button" title="Clear text" class="min-h-[48px] px-3.5 py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant text-sm font-semibold flex items-center justify-center gap-1.5 transition-all">
+            <span class="material-symbols-outlined text-[18px]">backspace</span>
+            <span>Clear</span>
+          </button>
+        </div>
+
+        <!-- Primary Call to Action Button -->
+        <button id="analyze-btn" type="button" class="w-full min-h-[56px] rounded-xl bg-primary hover:bg-primary-container text-on-primary font-bold text-base flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99] mt-2">
+          <span class="material-symbols-outlined text-[24px]">verified_user</span>
+          <span id="analyze-btn-text">Analyze message</span>
+        </button>
+      </div>
+
+      <!-- Live Loading State Indicator -->
+      <div id="state-analyzing" class="hidden bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/30 items-center gap-3.5">
+        <div class="relative w-8 h-8 flex items-center justify-center shrink-0">
+          <svg class="animate-spin w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" fill="currentColor"></path>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm text-on-surface">Analyzing threat patterns with Gemini AI...</span>
+          <span class="text-xs text-on-surface-variant">Scanning urgency, suspicious links, impersonation, and known fraud patterns</span>
+        </div>
+      </div>
+
+      <!-- Error / Retry Banner -->
+      <div id="state-error" class="hidden bg-error-container rounded-2xl p-4 shadow-sm items-start justify-between gap-3 border border-error/20">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-full bg-error flex items-center justify-center shrink-0 mt-0.5 text-on-error">
+            <span class="material-symbols-outlined text-[20px]">error</span>
+          </div>
+          <div class="flex flex-col space-y-0.5">
+            <span id="error-banner-title" class="font-bold text-sm text-on-error-container">Analysis error</span>
+            <p id="error-banner-msg" class="text-xs text-on-error-container leading-relaxed">Unable to complete analysis. Please try again.</p>
+          </div>
+        </div>
+        <button id="retry-btn" type="button" class="shrink-0 min-h-[40px] px-3.5 rounded-lg bg-surface-container-lowest text-on-error-container hover:bg-surface-container text-xs font-bold shadow-sm flex items-center gap-1 self-center">
+          <span class="material-symbols-outlined text-[16px]">refresh</span>
+          <span>Retry</span>
+        </button>
+      </div>
+
+      <!-- Automatic Privacy Masking Note -->
+      <div class="bg-surface-container rounded-2xl p-4 flex items-start gap-3 shadow-sm border border-outline-variant/20">
+        <div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-on-tertiary-fixed text-[22px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+        </div>
+        <div class="flex flex-col space-y-1">
+          <h3 class="font-bold text-sm text-on-surface">Automatic Privacy Masking</h3>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Never paste passwords or PINs. We try to hide phone numbers, card and account numbers, and OTP codes before analysis, but not every format is caught.
+          </p>
+        </div>
+      </div>
+
+      <!-- Seniors / Peace of mind reassurance card -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 flex items-center gap-4 shadow-sm border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+          <span class="material-symbols-outlined text-3xl">psychology</span>
+        </div>
+        <div class="flex flex-col space-y-0.5">
+          <span class="text-[11px] text-tertiary uppercase tracking-wider font-bold">Trusted Protection</span>
+          <h4 class="font-bold text-sm text-on-surface">Never feel pressured or hurried</h4>
+          <p class="text-xs text-on-surface-variant">Scammers rely on manufactured urgency. Taking 10 seconds to verify here keeps your savings safe.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: ANALYSIS RESULT -->
+    <section id="view-result" class="hidden flex-col w-full space-y-4 pb-8">
+      
+      <!-- Analyzed Message Snippet -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/30">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-secondary flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">sms</span>
+            Analyzed Message
+          </span>
+          <span id="result-timestamp" class="text-[11px] bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-medium">Just now</span>
+        </div>
+        <div class="bg-surface-container-low rounded-xl p-3 text-on-surface">
+          <p id="result-message-text" class="text-sm select-all leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Primary Risk Banner -->
+      <div id="risk-banner-card" class="rounded-2xl p-5 shadow-md transition-all duration-300">
+        <div class="flex items-start gap-3">
+          <div id="risk-icon-container" class="w-12 h-12 rounded-full flex items-center justify-center shrink-0">
+            <span id="risk-icon" class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-1.5">
+              <span id="risk-emoji" class="text-xl">🚨</span>
+              <h2 id="risk-title" class="font-extrabold text-xl tracking-tight uppercase">RISK LEVEL</h2>
+            </div>
+            <p id="risk-confidence" class="text-xs font-bold mt-1 opacity-95">Verified with Scam Shield AI</p>
+            <p id="risk-tagline" class="text-sm mt-1.5 leading-snug opacity-90"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Tier Comparison Strip -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/30">
+        <p class="text-xs text-on-surface-variant mb-2.5 font-medium">Understanding Shield Security Tiers:</p>
+        <div class="grid grid-cols-3 gap-2">
+          <div id="tier-pill-high" class="rounded-xl p-2.5 flex flex-col items-center text-center transition-all">
+            <span class="material-symbols-outlined text-[20px] text-error font-bold" style="font-variation-settings: 'FILL' 1;">warning</span>
+            <span class="text-xs font-bold mt-1 text-on-surface">High Risk</span>
+            <span class="text-[11px] text-error font-medium leading-tight">Active Threat</span>
+          </div>
+          <div id="tier-pill-medium" class="rounded-xl p-2.5 flex flex-col items-center text-center transition-all">
+            <span class="material-symbols-outlined text-[20px] text-amber-600">report_problem</span>
+            <span class="text-xs font-bold mt-1 text-on-surface">Medium Risk</span>
+            <span class="text-[11px] text-amber-700 font-medium leading-tight">Be Cautious</span>
+          </div>
+          <div id="tier-pill-low" class="rounded-xl p-2.5 flex flex-col items-center text-center transition-all">
+            <span class="material-symbols-outlined text-[20px] text-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
+            <span class="text-xs font-bold mt-1 text-on-surface">Low Risk</span>
+            <span class="text-[11px] text-tertiary font-medium leading-tight">Likely Safe</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plain-English Summary & Read Aloud -->
+      <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <h3 class="font-bold text-base text-on-surface flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[24px]">psychology_alt</span>
+            Plain-English Summary
+          </h3>
+          <button id="ttsButton" type="button" class="min-h-[40px] px-3.5 bg-primary/10 text-primary hover:bg-primary hover:text-on-primary active:scale-95 transition-all rounded-xl flex items-center gap-1.5 text-xs font-bold">
+            <span class="material-symbols-outlined text-[18px]" id="ttsIcon">volume_up</span>
+            <span id="ttsText">Read aloud</span>
+          </button>
+        </div>
+        <p id="summaryText" class="text-sm text-on-surface-variant leading-relaxed"></p>
+      </div>
+
+      <!-- Identified Red Flags -->
+      <div id="red-flags-card" class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/30">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-error text-[22px]" style="font-variation-settings: 'FILL' 1;">flag</span>
+          <h3 id="red-flags-heading" class="font-bold text-base text-on-surface">Identified Red Flags</h3>
+        </div>
+        <div id="red-flags-container" class="flex flex-col gap-2.5"></div>
+      </div>
+
+      <!-- Reassuring Action Box: What to do next -->
+      <div class="bg-secondary-container text-on-secondary-container rounded-2xl p-5 shadow-sm border border-outline-variant/20">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="material-symbols-outlined text-primary text-[24px]" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+          <h3 class="font-bold text-base text-on-secondary-fixed">What to do next</h3>
+        </div>
+        <p class="text-xs text-on-secondary-fixed-variant mb-3">Take a breath. You are in control. Follow these clear safeguards:</p>
+        <div id="next-steps-container" class="flex flex-col gap-2.5 text-sm text-on-secondary-fixed"></div>
+      </div>
+
+      <!-- Feedback Section -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-outline-variant/30">
+        <p class="text-xs font-bold text-center text-on-surface mb-3">Did this analysis help you?</p>
+        <div class="grid grid-cols-2 gap-3">
+          <button id="feedback-scam-btn" type="button" class="min-h-[48px] bg-surface-container hover:bg-surface-container-high rounded-xl flex items-center justify-center gap-2 text-sm font-bold text-on-surface transition-all active:scale-95">
+            <span>👍</span>
+            <span>Yes, was scam</span>
+          </button>
+          <button id="feedback-legit-btn" type="button" class="min-h-[48px] bg-surface-container hover:bg-surface-container-high rounded-xl flex items-center justify-center gap-2 text-sm font-bold text-on-surface transition-all active:scale-95">
+            <span>👎</span>
+            <span>No, it was legit</span>
+          </button>
+        </div>
+        <p id="feedbackToast" class="hidden text-center mt-2.5 text-xs text-tertiary font-bold">
+          Thank you! Your feedback helps protect millions.
+        </p>
+      </div>
+
+      <!-- Return to check another message -->
+      <div class="pt-2">
+        <button id="check-another-btn" type="button" class="w-full min-h-[56px] bg-primary text-on-primary hover:bg-primary-container active:scale-[0.98] transition-all rounded-xl flex items-center justify-center gap-2 font-bold text-base shadow-sm">
+          <span class="material-symbols-outlined text-[24px]">add_moderator</span>
+          <span>Check another message</span>
+        </button>
+      </div>
+
+      <!-- Disclaimer Footer -->
+      <div class="p-3.5 rounded-xl bg-surface-container-low text-on-surface-variant flex items-start gap-2.5 border border-outline-variant/20">
+        <span class="text-base shrink-0 mt-0.5">ℹ️</span>
+        <p class="text-xs leading-relaxed">
+          <strong>AI advice:</strong> When in doubt, call the official organization directly using the phone number printed on your physical billing statement or verified website. Never use numbers or links sent in the message itself.
+        </p>
+      </div>
+    </section>
+
+    <!-- VIEW 3: SCAN HISTORY -->
+    <section id="view-history" class="hidden flex-col w-full space-y-4 pb-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-extrabold text-on-surface tracking-tight">Scan History</h1>
+          <p class="text-sm text-on-surface-variant">Review and manage past threat analyses</p>
+        </div>
+        <div class="w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-[24px]">verified</span>
+        </div>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="relative w-full">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+          <span class="material-symbols-outlined text-[22px]">search</span>
+        </div>
+        <input
+          id="history-search-input"
+          type="search"
+          placeholder="Search past scans or keywords..."
+          class="w-full h-14 pl-12 pr-4 rounded-xl bg-surface-container-low text-on-surface text-sm placeholder:text-outline focus:outline-none focus:bg-surface-container transition-colors shadow-sm border border-outline-variant/30"
+        />
+      </div>
+
+      <!-- Micro Stats Ribbon -->
+      <div class="grid grid-cols-3 gap-2 py-1">
+        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-low shadow-sm border border-outline-variant/20">
+          <span id="stat-high" class="font-extrabold text-lg text-error">0</span>
+          <span class="text-[11px] text-on-surface-variant uppercase tracking-wide font-semibold">High Risk</span>
+        </div>
+        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-low shadow-sm border border-outline-variant/20">
+          <span id="stat-medium" class="font-extrabold text-lg text-amber-600">0</span>
+          <span class="text-[11px] text-on-surface-variant uppercase tracking-wide font-semibold">Suspicious</span>
+        </div>
+        <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-low shadow-sm border border-outline-variant/20">
+          <span id="stat-low" class="font-extrabold text-lg text-tertiary">0</span>
+          <span class="text-[11px] text-on-surface-variant uppercase tracking-wide font-semibold">Safe</span>
+        </div>
+      </div>
+
+      <!-- History List Container -->
+      <div id="history-container" class="flex flex-col space-y-3"></div>
+
+      <!-- Empty State -->
+      <div id="history-empty" class="hidden relative overflow-hidden rounded-2xl bg-surface-container-low p-8 flex flex-col items-center text-center shadow-sm border border-outline-variant/20">
+        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-3">
+          <span class="material-symbols-outlined text-[32px]">shield</span>
+        </div>
+        <span class="text-[11px] uppercase tracking-wider text-primary font-bold mb-1">Getting Started</span>
+        <h3 class="font-bold text-lg text-on-surface">No scanned messages yet</h3>
+        <p class="text-xs text-on-surface-variant mt-1.5 max-w-sm">
+          Whenever you check a suspicious SMS, email, or WhatsApp message, it will be saved here privately.
+        </p>
+        <button id="empty-check-btn" type="button" class="mt-5 px-6 h-12 rounded-xl bg-primary text-on-primary font-bold text-sm flex items-center justify-center gap-2 shadow-md active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+          <span>Check your first message</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm hidden">
+    <div class="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-6 shadow-2xl flex flex-col space-y-4 border border-outline-variant/30">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[22px]">delete_forever</span>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="font-bold text-base text-on-surface">Delete this scan?</h2>
+          <span class="text-xs text-on-surface-variant">This cannot be recovered</span>
+        </div>
+      </div>
+      <p class="text-xs text-on-surface-variant leading-relaxed">
+        Delete this scan from your history? You won’t be able to re-check the flagged indicators unless submitted again.
+      </p>
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button id="cancel-delete-btn" type="button" class="h-12 w-full rounded-xl bg-surface-container font-bold text-xs text-on-surface active:scale-95 transition-transform">
+          Cancel
+        </button>
+        <button id="confirm-delete-btn" type="button" class="h-12 w-full rounded-xl bg-error text-on-error font-bold text-xs active:scale-95 transition-transform">
+          Confirm Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Bottom Navigation Bar -->
+  <nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl border-t border-outline-variant/30 shadow-[0_-2px_12px_rgba(0,0,0,0.05)]">
+    <div class="max-w-md mx-auto h-16 px-4 flex items-center justify-around">
+      <button id="tab-nav-check" type="button" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl transition-colors text-primary font-bold">
+        <span class="material-symbols-outlined text-[24px]">verified_user</span>
+        <span class="text-[11px] mt-0.5">Check</span>
+      </button>
+      <button id="tab-nav-history" type="button" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl text-on-surface-variant hover:text-on-surface transition-colors font-medium">
+        <span class="material-symbols-outlined text-[24px]">history</span>
+        <span class="text-[11px] mt-0.5">History</span>
+      </button>
+      <button id="tab-nav-logout" type="button" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl text-on-surface-variant hover:text-on-surface transition-colors font-medium">
+        <span class="material-symbols-outlined text-[24px]">logout</span>
+        <span class="text-[11px] mt-0.5">Log Out</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Interactive Dashboard App Controller -->
+  <script type="module">
+    import { requireAuth, getUser, logout, checksApi } from "./js/api.js";
+
+    if (requireAuth()) {
+      let currentCheck = null;
+      let checkPendingDeleteId = null;
+      let cachedChecks = [];
+      let isSpeaking = false;
+
+      // Populate user info
+      const user = getUser();
+      const navUserEmail = document.getElementById("nav-user-email");
+      if (user?.email && navUserEmail) navUserEmail.textContent = user.email;
+
+      // Header logout button
+      document.getElementById("logout-header-btn")?.addEventListener("click", logout);
+
+      // Views
+      const viewCheck = document.getElementById("view-check");
+      const viewResult = document.getElementById("view-result");
+      const viewHistory = document.getElementById("view-history");
+      const navSubtitle = document.getElementById("nav-subtitle");
+
+      // Tabs
+      const tabNavCheck = document.getElementById("tab-nav-check");
+      const tabNavHistory = document.getElementById("tab-nav-history");
+      const tabNavLogout = document.getElementById("tab-nav-logout");
+
+      function setActiveTab(tab) {
+        if (tab === "check") {
+          viewCheck.classList.remove("hidden");
+          viewCheck.classList.add("flex");
+          viewResult.classList.add("hidden");
+          viewHistory.classList.add("hidden");
+          navSubtitle.textContent = "Check Threat";
+
+          tabNavCheck.className = "flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl transition-colors text-primary font-bold";
+          tabNavHistory.className = "flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl text-on-surface-variant hover:text-on-surface transition-colors font-medium";
+        } else if (tab === "result") {
+          viewCheck.classList.add("hidden");
+          viewResult.classList.remove("hidden");
+          viewResult.classList.add("flex");
+          viewHistory.classList.add("hidden");
+          navSubtitle.textContent = "Analysis Result";
+
+          tabNavCheck.className = "flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl transition-colors text-primary font-bold";
+          tabNavHistory.className = "flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl text-on-surface-variant hover:text-on-surface transition-colors font-medium";
+        } else if (tab === "history") {
+          viewCheck.classList.add("hidden");
+          viewResult.classList.add("hidden");
+          viewHistory.classList.remove("hidden");
+          viewHistory.classList.add("flex");
+          navSubtitle.textContent = "Scan History";
+
+          tabNavHistory.className = "flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl transition-colors text-primary font-bold";
+          tabNavCheck.className = "flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 rounded-xl text-on-surface-variant hover:text-on-surface transition-colors font-medium";
+          loadHistoryList();
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabNavCheck.addEventListener("click", () => setActiveTab("check"));
+      tabNavHistory.addEventListener("click", () => setActiveTab("history"));
+      tabNavLogout.addEventListener("click", logout);
+
+      // Check View Controls
+      const textarea = document.getElementById("scam-text-input");
+      const charCounter = document.getElementById("char-counter");
+      const clearBtn = document.getElementById("clear-input-btn");
+      const pasteBtn = document.getElementById("paste-clipboard-btn");
+      const voiceBtn = document.getElementById("voice-input-btn");
+      const voiceLabel = document.getElementById("voice-btn-label");
+      const sampleBtn = document.getElementById("load-sample-btn");
+      const analyzeBtn = document.getElementById("analyze-btn");
+      const analyzeBtnText = document.getElementById("analyze-btn-text");
+      const stateAnalyzing = document.getElementById("state-analyzing");
+      const stateError = document.getElementById("state-error");
+      const errorMsg = document.getElementById("error-banner-msg");
+      const retryBtn = document.getElementById("retry-btn");
+
+      function updateCounter() {
+        const count = textarea.value.length;
+        charCounter.textContent = `${count.toLocaleString()} / 5,000 characters`;
+        if (count > 4800) {
+          charCounter.classList.add("text-error");
+        } else {
+          charCounter.classList.remove("text-error");
+        }
+      }
+
+      textarea.addEventListener("input", updateCounter);
+
+      clearBtn.addEventListener("click", () => {
+        textarea.value = "";
+        updateCounter();
+        textarea.focus();
+      });
+
+      sampleBtn.addEventListener("click", () => {
+        textarea.value = "ALERT: Your bank account has an unpaid fee of $2.35. Click here immediately to confirm your address before your account is suspended: http://bit.ly/bank-security-kyc";
+        updateCounter();
+      });
+
+      pasteBtn.addEventListener("click", async () => {
+        try {
+          if (navigator.clipboard?.readText) {
+            const clipText = await navigator.clipboard.readText();
+            if (clipText) {
+              textarea.value = clipText;
+              updateCounter();
+              return;
+            }
+          }
+        } catch {
+          // Fallback example
+        }
+        textarea.value = "HSBC Notice: Unusual transaction of $849.00 on your debit card. If this was not you, call fraud helpline +1-800-555-0199 now.";
+        updateCounter();
+      });
+
+      // Voice Dictation (Web Speech API)
+      if (voiceBtn) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = false;
+          recognition.interimResults = false;
+          recognition.lang = "en-US";
+
+          recognition.onstart = () => {
+            voiceLabel.textContent = "Listening...";
+            voiceBtn.classList.add("bg-primary/20", "text-primary");
+          };
+
+          recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            textarea.value = (textarea.value ? textarea.value + " " : "") + transcript;
+            updateCounter();
+          };
+
+          recognition.onerror = () => {
+            voiceLabel.textContent = "Dictate voice";
+            voiceBtn.classList.remove("bg-primary/20", "text-primary");
+          };
+
+          recognition.onend = () => {
+            voiceLabel.textContent = "Dictate voice";
+            voiceBtn.classList.remove("bg-primary/20", "text-primary");
+          };
+
+          voiceBtn.addEventListener("click", () => {
+            try {
+              recognition.start();
+            } catch {
+              recognition.stop();
+            }
+          });
+        } else {
+          voiceBtn.addEventListener("click", () => {
+            alert("Voice dictation is not supported by your current browser.");
+          });
+        }
+      }
+
+      // Analyze Handler
+      async function runAnalysis() {
+        const text = textarea.value.trim();
+        if (text.length < 5) {
+          showErrorState("Message too short", "Please enter at least 5 characters to analyze.");
+          return;
+        }
+
+        clearErrorState();
+        stateAnalyzing.classList.remove("hidden");
+        stateAnalyzing.classList.add("flex");
+        analyzeBtn.disabled = true;
+        analyzeBtnText.textContent = "Analyzing with AI...";
+
+        try {
+          const result = await checksApi.createCheck(text);
+          stateAnalyzing.classList.add("hidden");
+          stateAnalyzing.classList.remove("flex");
+          displayResult(result);
+        } catch (err) {
+          stateAnalyzing.classList.add("hidden");
+          stateAnalyzing.classList.remove("flex");
+          showErrorState("Analysis Failed", err.message || "Failed to analyze message. Please try again.");
+        } finally {
+          analyzeBtn.disabled = false;
+          analyzeBtnText.textContent = "Analyze message";
+        }
+      }
+
+      analyzeBtn.addEventListener("click", runAnalysis);
+      retryBtn?.addEventListener("click", runAnalysis);
+
+      function showErrorState(title, msg) {
+        document.getElementById("error-banner-title").textContent = title;
+        document.getElementById("error-banner-msg").textContent = msg;
+        stateError.classList.remove("hidden");
+        stateError.classList.add("flex");
+        stateError.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function clearErrorState() {
+        stateError.classList.add("hidden");
+        stateError.classList.remove("flex");
+      }
+
+      // Result View Display
+      const resultMessageText = document.getElementById("result-message-text");
+      const resultTimestamp = document.getElementById("result-timestamp");
+      const riskBannerCard = document.getElementById("risk-banner-card");
+      const riskIconContainer = document.getElementById("risk-icon-container");
+      const riskIcon = document.getElementById("risk-icon");
+      const riskEmoji = document.getElementById("risk-emoji");
+      const riskTitle = document.getElementById("risk-title");
+      const riskConfidence = document.getElementById("risk-confidence");
+      const riskTagline = document.getElementById("risk-tagline");
+      const summaryText = document.getElementById("summaryText");
+      const redFlagsContainer = document.getElementById("red-flags-container");
+      const redFlagsHeading = document.getElementById("red-flags-heading");
+      const nextStepsContainer = document.getElementById("next-steps-container");
+      const feedbackScamBtn = document.getElementById("feedback-scam-btn");
+      const feedbackLegitBtn = document.getElementById("feedback-legit-btn");
+      const feedbackToast = document.getElementById("feedbackToast");
+      const checkAnotherBtn = document.getElementById("check-another-btn");
+
+      function displayResult(check) {
+        currentCheck = check;
+        setActiveTab("result");
+
+        resultMessageText.textContent = check.message_text || textarea.value;
+        if (check.created_at) {
+          const d = new Date(check.created_at);
+          resultTimestamp.textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " · " + d.toLocaleDateString();
+        } else {
+          resultTimestamp.textContent = "Just now";
+        }
+
+        const risk = (check.risk_level || "medium").toLowerCase();
+        
+        // Tier Pills Highlight
+        const pillHigh = document.getElementById("tier-pill-high");
+        const pillMedium = document.getElementById("tier-pill-medium");
+        const pillLow = document.getElementById("tier-pill-low");
+        [pillHigh, pillMedium, pillLow].forEach(p => p.className = "rounded-xl p-2.5 flex flex-col items-center text-center opacity-40 bg-surface-container");
+
+        if (risk === "high") {
+          riskBannerCard.className = "bg-error text-on-error rounded-2xl p-5 shadow-md";
+          riskIconContainer.className = "w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-white";
+          riskIcon.textContent = "shield_with_house";
+          riskEmoji.textContent = "🚨";
+          riskTitle.textContent = "HIGH RISK OF SCAM";
+          riskConfidence.textContent = "High Confidence Detection";
+          riskTagline.textContent = "Do not interact. This message uses known deceptive phishing techniques to steal sensitive data or money.";
+          pillHigh.className = "rounded-xl p-2.5 flex flex-col items-center text-center bg-error-container text-on-error-container shadow-sm border border-error/30";
+        } else if (risk === "low") {
+          riskBannerCard.className = "bg-tertiary text-on-tertiary rounded-2xl p-5 shadow-md";
+          riskIconContainer.className = "w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-white";
+          riskIcon.textContent = "verified_user";
+          riskEmoji.textContent = "✅";
+          riskTitle.textContent = "LOW RISK - LIKELY SAFE";
+          riskConfidence.textContent = "Safe Signal Detected";
+          riskTagline.textContent = "This message appears standard and legitimate. Still avoid sharing secret passwords or PINs.";
+          pillLow.className = "rounded-xl p-2.5 flex flex-col items-center text-center bg-tertiary-fixed text-on-tertiary-fixed shadow-sm border border-tertiary/30";
+        } else {
+          riskBannerCard.className = "bg-amber-600 text-white rounded-2xl p-5 shadow-md";
+          riskIconContainer.className = "w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 text-white";
+          riskIcon.textContent = "report_problem";
+          riskEmoji.textContent = "⚠️";
+          riskTitle.textContent = "MEDIUM RISK - BE CAUTIOUS";
+          riskConfidence.textContent = "Suspicious Signals Found";
+          riskTagline.textContent = "Some elements look questionable. Verify directly with the sender through official channels.";
+          pillMedium.className = "rounded-xl p-2.5 flex flex-col items-center text-center bg-amber-100 text-amber-900 shadow-sm border border-amber-300";
+        }
+
+        // Summary
+        summaryText.textContent = check.summary || "No summary provided.";
+
+        // Red Flags
+        redFlagsContainer.replaceChildren();
+        const flags = check.red_flags || [];
+        redFlagsHeading.textContent = `${flags.length} Identified Red Flag${flags.length === 1 ? '' : 's'}`;
+        if (flags.length === 0) {
+          const emptyDiv = document.createElement("div");
+          emptyDiv.className = "bg-surface-container-low rounded-xl p-3 flex items-center gap-2 text-on-surface-variant text-xs";
+          const iconSpan = document.createElement("span");
+          iconSpan.className = "material-symbols-outlined text-tertiary text-[18px]";
+          iconSpan.textContent = "check_circle";
+          const textSpan = document.createElement("span");
+          textSpan.textContent = "No active red flags detected in this text.";
+          emptyDiv.appendChild(iconSpan);
+          emptyDiv.appendChild(textSpan);
+          redFlagsContainer.appendChild(emptyDiv);
+        } else {
+          flags.forEach(f => {
+            const flagEl = document.createElement("div");
+            flagEl.className = "bg-surface-container-low rounded-xl p-3 flex items-start gap-3 border border-outline-variant/20";
+
+            const iconContainer = document.createElement("div");
+            iconContainer.className = "w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center shrink-0 mt-0.5 font-bold";
+            const iconSpan = document.createElement("span");
+            iconSpan.className = "material-symbols-outlined text-[18px] text-error";
+            iconSpan.textContent = "flag";
+            iconContainer.appendChild(iconSpan);
+
+            const contentDiv = document.createElement("div");
+            contentDiv.className = "flex-1";
+
+            const typeSpan = document.createElement("span");
+            typeSpan.className = "bg-error-container text-on-error-container text-[11px] font-bold px-2 py-0.5 rounded uppercase tracking-wider";
+            typeSpan.textContent = f.type || "Suspicious";
+
+            const p = document.createElement("p");
+            p.className = "text-xs text-on-surface mt-1.5 leading-relaxed font-medium";
+            p.textContent = f.explanation || "";
+
+            contentDiv.appendChild(typeSpan);
+            contentDiv.appendChild(p);
+
+            flagEl.appendChild(iconContainer);
+            flagEl.appendChild(contentDiv);
+            redFlagsContainer.appendChild(flagEl);
+          });
+        }
+
+        // Next Steps
+        nextStepsContainer.replaceChildren();
+        const rawSteps = check.next_steps || "Do not click any links or share sensitive information.";
+        const stepItems = rawSteps.split(/(?<=[.?!])\s+/).filter(Boolean);
+        stepItems.forEach(step => {
+          const stepDiv = document.createElement("div");
+          stepDiv.className = "flex items-start gap-2.5 bg-surface-container-lowest/80 rounded-xl p-3 shadow-sm";
+
+          const iconSpan = document.createElement("span");
+          iconSpan.className = "material-symbols-outlined text-tertiary text-[20px] shrink-0 mt-0.5 font-bold";
+          iconSpan.textContent = "check_circle";
+
+          const textSpan = document.createElement("span");
+          textSpan.className = "text-xs font-semibold leading-relaxed";
+          textSpan.textContent = step;
+
+          stepDiv.appendChild(iconSpan);
+          stepDiv.appendChild(textSpan);
+          nextStepsContainer.appendChild(stepDiv);
+        });
+
+        // Feedback Buttons State
+        updateFeedbackUI(check.feedback);
+      }
+
+      function updateFeedbackUI(feedback) {
+        feedbackScamBtn.className = "min-h-[48px] rounded-xl flex items-center justify-center gap-2 text-sm font-bold transition-all active:scale-95 " +
+          (feedback === "scam" ? "bg-error text-on-error shadow-sm" : "bg-surface-container hover:bg-surface-container-high text-on-surface");
+        feedbackLegitBtn.className = "min-h-[48px] rounded-xl flex items-center justify-center gap-2 text-sm font-bold transition-all active:scale-95 " +
+          (feedback === "legit" ? "bg-tertiary text-on-tertiary shadow-sm" : "bg-surface-container hover:bg-surface-container-high text-on-surface");
+        
+        if (feedback) {
+          feedbackToast.classList.remove("hidden");
+        } else {
+          feedbackToast.classList.add("hidden");
+        }
+      }
+
+      // Feedback Handlers
+      async function submitFeedback(val) {
+        if (!currentCheck?.id) return;
+        try {
+          const updated = await checksApi.setFeedback(currentCheck.id, val);
+          currentCheck.feedback = updated.feedback;
+          updateFeedbackUI(updated.feedback);
+        } catch (err) {
+          alert("Failed to submit feedback: " + err.message);
+        }
+      }
+
+      feedbackScamBtn.addEventListener("click", () => submitFeedback("scam"));
+      feedbackLegitBtn.addEventListener("click", () => submitFeedback("legit"));
+
+      checkAnotherBtn.addEventListener("click", () => {
+        textarea.value = "";
+        updateCounter();
+        setActiveTab("check");
+        textarea.focus();
+      });
+
+      // Text to Speech
+      const ttsBtn = document.getElementById("ttsButton");
+      const ttsIcon = document.getElementById("ttsIcon");
+      const ttsText = document.getElementById("ttsText");
+
+      ttsBtn?.addEventListener("click", () => {
+        if (!("speechSynthesis" in window)) {
+          alert("Text-to-speech is not supported on this browser.");
+          return;
+        }
+
+        if (isSpeaking) {
+          window.speechSynthesis.cancel();
+          isSpeaking = false;
+          ttsIcon.textContent = "volume_up";
+          ttsText.textContent = "Read aloud";
+        } else {
+          window.speechSynthesis.cancel();
+          const toSpeak = `${riskTitle.textContent}. ${summaryText.textContent}. Next steps: ${nextStepsContainer.innerText}`;
+          const utterance = new SpeechSynthesisUtterance(toSpeak);
+          utterance.rate = 0.9;
+          utterance.onend = () => {
+            isSpeaking = false;
+            ttsIcon.textContent = "volume_up";
+            ttsText.textContent = "Read aloud";
+          };
+          utterance.onerror = () => {
+            isSpeaking = false;
+            ttsIcon.textContent = "volume_up";
+            ttsText.textContent = "Read aloud";
+          };
+          window.speechSynthesis.speak(utterance);
+          isSpeaking = true;
+          ttsIcon.textContent = "stop";
+          ttsText.textContent = "Stop reading";
+        }
+      });
+
+      // HISTORY VIEW CONTROLLER
+      const historyContainer = document.getElementById("history-container");
+      const historyEmpty = document.getElementById("history-empty");
+      const historySearch = document.getElementById("history-search-input");
+      const statHigh = document.getElementById("stat-high");
+      const statMedium = document.getElementById("stat-medium");
+      const statLow = document.getElementById("stat-low");
+      const emptyCheckBtn = document.getElementById("empty-check-btn");
+
+      emptyCheckBtn?.addEventListener("click", () => setActiveTab("check"));
+
+      async function loadHistoryList() {
+        try {
+          const loadingDiv = document.createElement("div");
+          loadingDiv.className = "py-8 text-center text-xs text-on-surface-variant flex items-center justify-center gap-2";
+          const spinner = document.createElement("span");
+          spinner.className = "spinner";
+          const loadText = document.createElement("span");
+          loadText.textContent = "Loading past scans...";
+          loadingDiv.appendChild(spinner);
+          loadingDiv.appendChild(loadText);
+          historyContainer.replaceChildren(loadingDiv);
+
+          const checks = await checksApi.listChecks();
+          cachedChecks = checks || [];
+          renderHistoryItems(cachedChecks);
+        } catch (err) {
+          const errDiv = document.createElement("div");
+          errDiv.className = "py-8 text-center text-xs text-error";
+          errDiv.textContent = `Unable to load scan history: ${err.message || "Unknown error"}`;
+          historyContainer.replaceChildren(errDiv);
+        }
+      }
+
+      function renderHistoryItems(items) {
+        // Calculate stats
+        let high = 0, med = 0, low = 0;
+        items.forEach(c => {
+          const r = (c.risk_level || "").toLowerCase();
+          if (r === "high") high++;
+          else if (r === "low") low++;
+          else med++;
+        });
+        statHigh.textContent = high;
+        statMedium.textContent = med;
+        statLow.textContent = low;
+
+        if (items.length === 0) {
+          historyContainer.replaceChildren();
+          historyEmpty.classList.remove("hidden");
+          historyEmpty.classList.add("flex");
+          return;
+        }
+
+        historyEmpty.classList.add("hidden");
+        historyEmpty.classList.remove("flex");
+        historyContainer.replaceChildren();
+
+        items.forEach(c => {
+          const risk = (c.risk_level || "medium").toLowerCase();
+          const d = c.created_at ? new Date(c.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Recently";
+          
+          let badgeStyle = "bg-amber-100 text-amber-900";
+          let badgeIcon = "gpp_maybe";
+          let badgeLabel = "Medium Risk";
+          if (risk === "high") {
+            badgeStyle = "bg-error-container text-on-error-container";
+            badgeIcon = "gpp_bad";
+            badgeLabel = "High Risk";
+          } else if (risk === "low") {
+            badgeStyle = "bg-tertiary-container text-on-tertiary-container";
+            badgeIcon = "verified_user";
+            badgeLabel = "Low Risk / Safe";
+          }
+
+          const card = document.createElement("div");
+          card.className = "flex flex-col rounded-2xl bg-surface-container-lowest p-4 shadow-sm border border-outline-variant/30 hover:border-primary transition-all cursor-pointer";
+
+          // Top Header Row
+          const topRow = document.createElement("div");
+          topRow.className = "flex items-center justify-between gap-2";
+
+          const badgeSpan = document.createElement("span");
+          badgeSpan.className = `inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeStyle} text-xs font-bold`;
+
+          const badgeIconSpan = document.createElement("span");
+          badgeIconSpan.className = "material-symbols-outlined text-[16px]";
+          badgeIconSpan.style.fontVariationSettings = "'FILL' 1";
+          badgeIconSpan.textContent = badgeIcon;
+
+          const badgeLabelSpan = document.createElement("span");
+          badgeLabelSpan.textContent = badgeLabel;
+
+          badgeSpan.appendChild(badgeIconSpan);
+          badgeSpan.appendChild(badgeLabelSpan);
+
+          const metaDiv = document.createElement("div");
+          metaDiv.className = "flex items-center gap-2";
+
+          const dateSpan = document.createElement("span");
+          dateSpan.className = "text-xs text-on-surface-variant font-medium";
+          dateSpan.textContent = d;
+
+          const delBtn = document.createElement("button");
+          delBtn.className = "w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-error-container/20 transition-colors delete-item-btn";
+          delBtn.setAttribute("title", "Delete scan");
+          delBtn.dataset.id = String(Number(c.id));
+
+          const delIcon = document.createElement("span");
+          delIcon.className = "material-symbols-outlined text-[18px]";
+          delIcon.textContent = "delete";
+          delBtn.appendChild(delIcon);
+
+          metaDiv.appendChild(dateSpan);
+          metaDiv.appendChild(delBtn);
+
+          topRow.appendChild(badgeSpan);
+          topRow.appendChild(metaDiv);
+
+          // Summary & View full analysis
+          const bodyDiv = document.createElement("div");
+          bodyDiv.className = "mt-2.5";
+
+          const summaryP = document.createElement("p");
+          summaryP.className = "font-bold text-sm text-on-surface line-clamp-2 leading-snug";
+          summaryP.textContent = `“${c.summary || "Scan details"}”`;
+
+          const viewRow = document.createElement("div");
+          viewRow.className = "mt-2 flex items-center justify-between text-xs text-primary font-bold";
+
+          const viewText = document.createElement("span");
+          viewText.textContent = "View full analysis";
+
+          const chevron = document.createElement("span");
+          chevron.className = "material-symbols-outlined text-[18px]";
+          chevron.textContent = "chevron_right";
+
+          viewRow.appendChild(viewText);
+          viewRow.appendChild(chevron);
+
+          bodyDiv.appendChild(summaryP);
+          bodyDiv.appendChild(viewRow);
+
+          card.appendChild(topRow);
+          card.appendChild(bodyDiv);
+
+          // Card click -> view details
+          card.addEventListener("click", async (e) => {
+            if (e.target.closest(".delete-item-btn")) return;
+            try {
+              const detail = await checksApi.getCheck(c.id);
+              displayResult(detail);
+            } catch (err) {
+              alert("Failed to load details: " + err.message);
+            }
+          });
+
+          // Delete button click (delBtn already created above via createElement)
+          delBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openDeleteModal(c.id);
+          });
+
+          historyContainer.appendChild(card);
+        });
+      }
+
+      // History Search filter
+      historySearch?.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (!query) {
+          renderHistoryItems(cachedChecks);
+          return;
+        }
+        const filtered = cachedChecks.filter(c => 
+          (c.summary || "").toLowerCase().includes(query) ||
+          (c.risk_level || "").toLowerCase().includes(query)
+        );
+        renderHistoryItems(filtered);
+      });
+
+      // Delete Modal
+      const deleteModal = document.getElementById("delete-modal");
+      const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
+      const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+
+      function openDeleteModal(id) {
+        checkPendingDeleteId = id;
+        deleteModal.classList.remove("hidden");
+      }
+
+      function closeDeleteModal() {
+        deleteModal.classList.add("hidden");
+        checkPendingDeleteId = null;
+      }
+
+      cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+
+      confirmDeleteBtn.addEventListener("click", async () => {
+        if (!checkPendingDeleteId) return;
+        try {
+          confirmDeleteBtn.disabled = true;
+          confirmDeleteBtn.textContent = "Deleting...";
+          await checksApi.deleteCheck(checkPendingDeleteId);
+          closeDeleteModal();
+          loadHistoryList();
+        } catch (err) {
+          alert("Failed to delete scan: " + err.message);
+        } finally {
+          confirmDeleteBtn.disabled = false;
+          confirmDeleteBtn.textContent = "Confirm Delete";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
