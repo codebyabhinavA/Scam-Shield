@@ -57,3 +57,5 @@ class AIVerdict(BaseModel):
     summary: str
     red_flags: list[AIRedFlag]
     next_steps: str
+class FeedbackUpdate(BaseModel):
+    feedback: Literal["scam", "legit"] | None

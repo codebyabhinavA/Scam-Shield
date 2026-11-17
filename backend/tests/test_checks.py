@@ -83,3 +83,26 @@ def test_stored_message_is_redacted(two_users):
     )
     text = r.json()["message_text"]
     assert "482913" not in text and "9876543210" not in text
+def test_feedback_roundtrip_and_validation(two_users):
+    a, b = two_users
+    cid = client.post("/checks", json=MSG, headers=a).json()["id"]
+    url = f"/checks/{cid}/feedback"
+
+    r = client.patch(url, json={"feedback": "scam"}, headers=a)
+    assert r.status_code == 200 and r.json()["feedback"] == "scam"
+    assert client.patch(url, json={"feedback": "banana"}, headers=a).status_code == 422
+    assert client.patch(url, json={"feedback": "legit"}, headers=b).status_code == 404
+    assert client.patch(url, json={"feedback": None}, headers=a).json()["feedback"] is None
+
+
+def test_rate_limit_blocks_and_deleting_does_not_reset(two_users, monkeypatch):
+    a, b = two_users
+    monkeypatch.setattr("rate_limit.MAX_CHECKS_PER_HOUR", 2)
+    ids = [client.post("/checks", json=MSG, headers=a).json()["id"] for _ in range(2)]
+    for cid in ids:
+        client.delete(f"/checks/{cid}", headers=a)
+
+    r = client.post("/checks", json=MSG, headers=a)
+    assert r.status_code == 429
+    assert int(r.headers["Retry-After"]) > 0
+    assert client.post("/checks", json=MSG, headers=b).status_code == 201

@@ -3,7 +3,8 @@ from ai_service import AIOutputError, AIServiceError, get_verdict
 from redaction import redact
 from database import get_connection
 from dependencies import get_current_user
-from models import CheckCreate, CheckDetail, CheckSummary
+from models import CheckCreate, CheckDetail, CheckSummary, FeedbackUpdate
+from rate_limit import enforce_ai_limit
 
 router = APIRouter(prefix="/checks", tags=["checks"])
 
@@ -24,7 +25,9 @@ def _get_check_detail(conn, check_id: int, user_id: int):
 
 @router.post("", response_model=CheckDetail, status_code=status.HTTP_201_CREATED)
 def create_check(payload: CheckCreate, user=Depends(get_current_user)):
+    
     try:
+        enforce_ai_limit(user["id"])
         verdict = get_verdict(payload.message_text)
     except AIServiceError:
         raise HTTPException(
@@ -77,3 +80,13 @@ def delete_check(check_id: int, user=Depends(get_current_user)):
         ).fetchone()
     if deleted is None:
         raise HTTPException(status_code=404, detail="Check not found")
+@router.patch("/{check_id}/feedback", response_model=CheckDetail)
+def set_feedback(check_id: int, payload: FeedbackUpdate, user=Depends(get_current_user)):
+    with get_connection() as conn:
+        updated = conn.execute(
+            "UPDATE checks SET feedback = %s WHERE id = %s AND user_id = %s RETURNING id",
+            (payload.feedback, check_id, user["id"]),
+        ).fetchone()
+        if updated is None:
+            raise HTTPException(status_code=404, detail="Check not found")
+        return _get_check_detail(conn, check_id, user["id"])
