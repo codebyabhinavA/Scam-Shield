@@ -2,7 +2,7 @@
 const API_BASE = (function () {
   const h = window.location.hostname;
   if (h === "127.0.0.1" || h === "localhost") return "http://127.0.0.1:8000";
-  return "https://PLACEHOLDER-API.onrender.com";
+ return "https://scam-shield-exo6.onrender.com";
 })();
 const TOKEN_KEY = "scamshield_token";
 const USER_KEY = "scamshield_user";
