@@ -1,5 +1,9 @@
 // Scam Shield - API Client & Session Management
-const API_BASE = window.location.origin.includes(":8000") ? "" : "http://127.0.0.1:8000";
+const API_BASE = (function () {
+  const h = window.location.hostname;
+  if (h === "127.0.0.1" || h === "localhost") return "http://127.0.0.1:8000";
+  return "https://PLACEHOLDER-API.onrender.com";
+})();
 const TOKEN_KEY = "scamshield_token";
 const USER_KEY = "scamshield_user";
 
@@ -68,7 +72,7 @@ export async function apiFetch(path, { method = "GET", body, auth = true } = {})
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   } catch (err) {
-    throw new Error("Cannot reach the backend server. Make sure FastAPI is running at " + API_BASE);
+    throw new Error("Can't reach the server right now. If it was idle, wait up to a minute and try again.");
   }
 
   if (response.status === 204) return null;

@@ -248,20 +248,20 @@
       <div class="mt-5 bg-surface-container-low p-4 rounded-2xl shadow-sm flex flex-col items-center text-center gap-3 border border-outline-variant/20">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-medium">
           <span class="material-symbols-outlined text-tertiary text-base" style="font-variation-settings: 'FILL' 1;">lock</span>
-          <span>Your data is encrypted & never shared with advertisers.</span>
+          <span>Messages are analyzed by an AI service (Google Gemini) after we try to hide phone numbers and OTPs. Don't paste passwords or PINs.</span>
         </div>
         <div class="flex items-center justify-center gap-5 text-secondary pt-1 flex-wrap">
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1.5" id="badge-https-login" style="display:none;">
             <span class="material-symbols-outlined text-lg text-tertiary">check_circle</span>
-            <span class="text-xs font-semibold">256-Bit TLS</span>
+            <span class="text-xs font-semibold">Encrypted connection (HTTPS)</span>
           </div>
           <div class="flex items-center gap-1.5">
             <span class="material-symbols-outlined text-lg text-tertiary">check_circle</span>
-            <span class="text-xs font-semibold">Zero Spam</span>
+            <span class="text-xs font-semibold">Privacy masking: we try to hide phone numbers and OTPs before analysis</span>
           </div>
           <div class="flex items-center gap-1.5">
             <span class="material-symbols-outlined text-lg text-tertiary">check_circle</span>
-            <span class="text-xs font-semibold">Human Support</span>
+            <span class="text-xs font-semibold">AI can be wrong: results say 'likely', never certain</span>
           </div>
         </div>
       </div>
@@ -270,5 +270,11 @@
   </main>
 
   <script type="module" src="js/auth.js"></script>
+  <script>
+    if (location.protocol === "https:") {
+      var el = document.getElementById("badge-https-login");
+      if (el) el.style.display = "";
+    }
+  </script>
 </body>
 </html>
